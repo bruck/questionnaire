@@ -4,6 +4,7 @@ use Moose;
 use constant { true => !!1, false => !!0 };
 use namespace::autoclean;
 
+use Carp 'carp';
 use Module::Runtime 'use_module';
 use My::App::Util 'mk_module_name';
 
@@ -106,6 +107,33 @@ sub from_db_object {
     }
 
     return $self;
+}
+
+sub save {
+    my ( $self, $schema ) = ( shift, @_ );
+
+    # Even though this object has 'rw' attributes, questionnaires are
+    # conceptually write-once.
+    if ( $self->has_id ) {
+        carp 'Save questionnaire which already exists';
+        return $self->id;
+    }
+
+    my $result = $schema
+        ->resultset( 'Questionnaire' )
+        ->create( {
+            title        => $self->title,
+            is_published => $self->is_published,
+        } );
+
+    $self->id( $result->questionnaire_id );
+
+    my $rank = 0;
+    for my $q ( @{ $self->questions } ) {
+        $q->_save( $self, ++$rank, @_ );
+    }
+
+    return $self->id;
 }
 
 sub summary_list {

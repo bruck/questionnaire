@@ -49,6 +49,22 @@ sub from_db_object {
     return $self;
 }
 
+sub _save {
+    my ( $self, $question, $rank, $schema ) = ( shift, @_ );
+
+    my $result = $schema
+        ->resultset( 'Option' )
+        ->create( {
+            'option_text'  => $self->option_text,
+            'option_rank'  => $rank,
+            'question_id'  => $question->id,
+        } );
+
+    $self->id( $result->option_id );
+
+    return $self->id;
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

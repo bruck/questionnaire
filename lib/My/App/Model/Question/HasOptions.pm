@@ -57,4 +57,17 @@ around 'from_db_object' => sub {
     return $self;
 };
 
+around '_save' => sub {
+    my ( $next, $self, $questionnaire, $rank, $schema ) = ( shift, shift, @_ );
+
+    my $return = $self->$next( @_ );
+
+    my $option_rank = 0;
+    for my $option ( @{ $self->options } ) {
+        $option->_save( $self, ++$option_rank, $schema );
+    }
+    
+    return $return;
+};
+
 1;

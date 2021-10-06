@@ -4,6 +4,7 @@ requires 'Catalyst::View::JSON';
 requires 'DBD::SQLite';
 requires 'DBI';
 requires 'DBIx::Class';
+requires 'HTTP::Request::Common';
 requires 'Module::Runtime';
 requires 'Moose';
 requires 'Path::Tiny';

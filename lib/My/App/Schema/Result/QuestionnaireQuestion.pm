@@ -165,11 +165,11 @@ use base 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 TABLE: C<questionnaire_questions>
+=head1 TABLE: C<questionnaire_question>
 
 =cut
 
-__PACKAGE__->table("questionnaire_questions");
+__PACKAGE__->table("questionnaire_question");
 
 =head1 ACCESSORS
 

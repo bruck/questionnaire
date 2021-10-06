@@ -37,11 +37,13 @@ sub _build_schema {
     my $config = $self->config;
 
     require My::App::Schema;
-    return 'My::App::Schema'->connect(
+    my $schema = 'My::App::Schema'->connect(
         $config->{'database'},
         $config->{'database_username'},
         $config->{'database_password'},
     );
+    $schema->maybe_deploy;
+    return $schema;
 }
 
 our $VERSION = '0.01';

@@ -18,10 +18,10 @@ sub mk_module_name {
         split /_|\s+/,
         lc $string;
     $class = "$prefix\::$class" if $prefix;
-    
+
     croak "Could not turn '$string' into a classname"
         unless is_module_name($class);
-    
+
     return $class;
 }
 

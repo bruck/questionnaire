@@ -5,17 +5,17 @@ INSERT INTO questionnaire
 
 INSERT INTO question
     VALUES ( 1, 'What is your age?', 'text' );
-INSERT INTO questionnaire_questions
+INSERT INTO questionnaire_question
     VALUES ( 1, 1, 2 );  -- deliberately out of order
  
 INSERT INTO question
     VALUES ( 2, 'What is your name?', 'text' );
-INSERT INTO questionnaire_questions
+INSERT INTO questionnaire_question
     VALUES ( 1, 2, 1 );  -- deliberately out of order
 
 INSERT INTO question
     VALUES ( 3, 'What is your favourite colour?', 'single_option' );
-INSERT INTO questionnaire_questions
+INSERT INTO questionnaire_question
     VALUES ( 1, 3, 3 );
 INSERT INTO option
     VALUES ( 1, 3, 'Red', 1 );
@@ -28,7 +28,7 @@ INSERT INTO option
 
 INSERT INTO question
     VALUES ( 4, 'Do you own any pets?', 'multi_option' );
-INSERT INTO questionnaire_questions
+INSERT INTO questionnaire_question
     VALUES ( 1, 4, 4 );
 INSERT INTO option
     VALUES ( 5, 4, 'Dog', 1 );

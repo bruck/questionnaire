@@ -51,4 +51,27 @@ sub from_db_object {
     return $self;
 }
 
+sub _save {
+    my ( $self, $questionnaire, $rank, $schema ) = ( shift, @_ );
+
+    my $result_q = $schema
+        ->resultset( 'Question' )
+        ->create( {
+            'question_type'  => $self->question_type,
+            'question_text'  => $self->question_text,
+        } );
+
+    $self->id( $result_q->question_id );
+
+    my $result_qq = $schema
+        ->resultset( 'QuestionnaireQuestion' )
+        ->create( {
+            'questionnaire_id' => $questionnaire->id,
+            'question_id'      => $self->id,
+            'rank'             => $rank,
+        } );
+
+    return $self->id;
+}
+
 1;
