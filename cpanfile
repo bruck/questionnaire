@@ -1,0 +1,12 @@
+requires 'namespace::autoclean';
+requires 'Catalyst';
+requires 'Catalyst::View::JSON';
+requires 'DBD::SQLite';
+requires 'DBI';
+requires 'DBIx::Class';
+requires 'Module::Runtime';
+requires 'Moose';
+requires 'Path::Tiny';
+requires 'Test::Class';
+requires 'Test2::V0';
+requires 'Test2::Tools::Explain';
