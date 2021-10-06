@@ -39,7 +39,7 @@ is(
             } )
     )->code ),
     200,
-    'GET /api/questionnaire -> ok',
+    'POST /api/questionnaire -> ok',
 );
 
 is(
