@@ -6,7 +6,7 @@
 
 /*
  Once a questionnaire has been published, its row in the questionnaire
- table and all its rows in questionnaire_questions should not be modified.
+ table and all its rows in questionnaire_question should not be modified.
  If you want to edit an existing, published questionnaire, start by
  cloning a new one with all the same questions.
  */

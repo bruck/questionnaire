@@ -106,7 +106,7 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 questionnaire_questions
+=head2 questionnaire_question
 
 Type: has_many
 
@@ -115,7 +115,7 @@ Related object: L<My::App::Schema::Result::QuestionnaireQuestion>
 =cut
 
 __PACKAGE__->has_many(
-  "questionnaire_questions",
+  "questionnaire_question",
   "My::App::Schema::Result::QuestionnaireQuestion",
   { "foreign.question_id" => "self.question_id" },
   { cascade_copy => 0, cascade_delete => 0 },
@@ -225,7 +225,7 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 questionnaire_questions
+=head2 questionnaire_question
 
 Type: has_many
 
@@ -234,7 +234,7 @@ Related object: L<My::App::Schema::Result::QuestionnaireQuestion>
 =cut
 
 __PACKAGE__->has_many(
-  "questionnaire_questions",
+  "questionnaire_question",
   "My::App::Schema::Result::QuestionnaireQuestion",
   { "foreign.question_id" => "self.question_id" },
   { cascade_copy => 0, cascade_delete => 0 },

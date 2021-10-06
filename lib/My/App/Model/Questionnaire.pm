@@ -92,7 +92,7 @@ sub from_db_object {
         is_published => $result->is_published,
     );
 
-    my $rs = $result->questionnaire_questions->search(
+    my $rs = $result->questionnaire_question->search(
         undef,
         { order_by => 'rank', prefetch => 'question' },
     );
