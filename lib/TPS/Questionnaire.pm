@@ -75,7 +75,7 @@ __PACKAGE__->setup();
 
 =head1 NAME
 
-TPS::Questionnaire - Catalyst based application
+TPS::Questionnaire - questionnaire application using Catalyst, DBIx::Class, and Moose
 
 =head1 SYNOPSIS
 
@@ -91,7 +91,9 @@ L<TPS::Questionnaire::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-Toby Inkster, tinkster@theperlshop.net
+Toby Inkster, tinkster@theperlshop.com
+
+Tim King, timk@theperlshop.com
 
 =head1 LICENSE
 
