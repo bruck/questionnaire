@@ -10,6 +10,29 @@ use constant { true => !!1, false => !!0 };
 use Carp qw(carp croak);
 use Module::Runtime qw(use_module is_module_name);
 
+=encoding utf-8
+
+=head1 NAME
+
+TPS::Questionnaire::Model::Questionnaire - represents a single questionnaire
+
+=head1 DESCRIPTION
+
+This class represents a single questionnaire; a titled collection of questions.
+
+=head1 ATTRIBUTES
+
+=head2 id
+
+Integer ID for the questionnaire. Will not be defined if the questionnaire is
+not yet stored in the database.
+
+C<clear_id> may be used to clear an existing ID, allowing it to be re-stored
+in the database with a different ID. C<has_id> indicates if this questionnaire
+has an ID.
+
+=cut
+
 has id => (
     is => 'rw',
     isa => 'Int',
@@ -17,17 +40,38 @@ has id => (
     predicate => 'has_id',
 );
 
+=head2 title
+
+Required string attribute; the title for the questionnaire.
+
+=cut
+
 has title => (
     is => 'rw',
     isa => 'Str',
     required => true,
 );
 
+=head2 is_published
+
+Optional boolean attribute; defaults to false.
+
+=cut
+
 has is_published => (
     is => 'rw',
     isa => 'Bool',
     default => sub { return false; },
 );
+
+=head2 questions
+
+Arrayref of questions, which should be objects doing the
+L<TPS::Questionnaire::Model::Question> role. Defaults to the empty array.
+A method C<add_question> is available to add a question to the end of the
+list.
+
+=cut
 
 has questions => (
     is => 'rw',
@@ -55,6 +99,14 @@ sub _question_module {
     return use_module($class);
 }
 
+=head1 METHODS
+
+=head2 from_hashref(\%data)
+
+An alternative constructor which creates a questionnaire object from a
+hashref of data, formatted in the same manner the API accepts.
+
+=cut
 
 sub from_hashref {
     my ($class, $data) = (shift, @_);
@@ -75,6 +127,13 @@ sub from_hashref {
     return $self;
 }
 
+=head2 to_hashref
+
+Creates a hashref of data for this questionnaire and its questions, suitable
+for JSON serialization.
+
+=cut
+
 sub to_hashref {
     my ($self) = (shift);
 
@@ -87,6 +146,14 @@ sub to_hashref {
     return $h;
 }
 
+=head2 from_id($schema, $id)
+
+Alternative constructor which creates a questionnaire object from a
+L<TPS::Questionnaire::Schema> object and the questionnaire's numeric ID
+in the database.
+
+=cut
+
 sub from_id {
     my ($class, $schema, $id) = (shift, @_);
 
@@ -98,6 +165,14 @@ sub from_id {
 
     return $class->from_db_object($schema, $result);
 }
+
+=head2 from_db_object($schema, $result)
+
+Alternative constructor which creates a questionnaire object from a
+L<TPS::Questionnaire::Schema> object and the questionnaire's
+L<TPS::Questionnaire::Schema::Result::Questionnaire> object.
+
+=cut
 
 sub from_db_object {
     my ($class, $schema, $result) = (shift, @_);
@@ -121,6 +196,14 @@ sub from_db_object {
 
     return $self;
 }
+
+=head2 save($schema)
+
+Acts as a no-op if the questionnaire is already in the database (has an ID).
+Otherwise, saves the questionnaire and its associated questions to the database,
+updating this object's ID.
+
+=cut
 
 sub save {
     my ($self, $schema) = (shift, @_);
@@ -149,8 +232,15 @@ sub save {
     return $self->id;
 }
 
+=head2 summary_list($schema)
+
+Returns a list of hashrefs, each of which have an "id" and "title" key.
+This lists all questionnaires in the database. (TODO: pagnination.)
+
+=cut
+
 sub summary_list {
-    my ($class, $schema, $id) = (shift, @_);
+    my ($class, $schema) = (shift, @_);
     my @return;
 
     my $rs = $schema
@@ -165,6 +255,17 @@ sub summary_list {
 
     \@return;
 }
+
+=head1 AUTHOR
+
+Toby Inkster, tinkster@theperlshop.net
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 __PACKAGE__->meta->make_immutable;
 
