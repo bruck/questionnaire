@@ -1,5 +1,7 @@
 package TPS::Questionnaire::Controller::Root;
 use Moose;
+use Pod::Simple::HTML;
+use Path::Tiny 'path';
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
@@ -18,7 +20,7 @@ TPS::Questionnaire::Controller::Root - Root Controller for TPS::Questionnaire
 
 =head1 DESCRIPTION
 
-[enter your description here]
+Handles requests for "/" and 404 errors.
 
 =head1 METHODS
 
@@ -31,13 +33,11 @@ The root page (/)
 sub index :Path :Args(0) {
     my ($self, $c) = @_;
 
-    my $message = sprintf(
-        '<p>The great new %s. Coming soon!</p>',
-        __PACKAGE__,
-    );
-
-    # Hello World
-    $c->response->body($message);
+    my $docs = path(__FILE__)->parent->child('API.pm');
+    my $p = 'Pod::Simple::HTML'->new;
+    $p->output_string(\my $html);
+    $p->parse_file("$docs");
+    $c->response->body($html);
 }
 
 =head2 default

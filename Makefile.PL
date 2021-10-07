@@ -24,9 +24,10 @@ requires 'DBI';
 requires 'DBIx::Class';
 requires 'HTTP::Request::Common';
 requires 'Module::Runtime';
+requires 'Path::Tiny';
+requires 'Pod::Simple::HTML';
 requires 'SQL::Translator';
 
-test_requires 'Path::Tiny';
 test_requires 'Test::Class';
 test_requires 'Test2::V0';
 test_requires 'Test2::Tools::Explain';
