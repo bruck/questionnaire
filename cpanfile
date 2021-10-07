@@ -18,4 +18,5 @@ on 'test' => sub {
     requires 'Test::Class';
     requires 'Test2::V0';
     requires 'Test2::Tools::Explain';
+    requires 'Test2::Tools::Spec';
 };

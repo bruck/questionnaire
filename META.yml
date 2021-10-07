@@ -1,7 +1,8 @@
 ---
 abstract: 'Catalyst based application'
 author:
-  - 'Toby Inkster, tinkster@theperlshop.net'
+  - 'Toby Inkster, tinkster@theperlshop.com'
+  - 'Tim King, timk@theperlshop.com'
 build_requires:
   ExtUtils::MakeMaker: 6.36
   Test::More: '0.88'
