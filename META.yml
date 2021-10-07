@@ -1,5 +1,5 @@
 ---
-abstract: 'Catalyst based application'
+abstract: 'questionnaire application using Catalyst, DBIx::Class, and Moose'
 author:
   - 'Toby Inkster <tinkster@theperlshop.com>, Tim King <timk@theperlshop.com>'
 build_requires:
