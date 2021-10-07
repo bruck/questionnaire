@@ -4,11 +4,19 @@ use warnings;
 use Test2::V0;
 use Test2::Tools::Explain;
 use JSON::PP qw( decode_json encode_json );
+use Path::Tiny qw(tempfile);
 
 use HTTP::Request::Common;
 
 BEGIN {
+    # This causes Catalyst::Plugin::ConfigLoader to load my_app_test.conf
+    # instead of my_app_local.conf.
     $ENV{'MY_APP_CONFIG_LOCAL_SUFFIX'} = 'test';
+
+    my $database_file = tempfile();
+    diag "Test database file $database_file";
+    # MY_APP_TEST_DATABASE is used by my_app_test.conf to find the SQLite database file.
+    $ENV{MY_APP_TEST_DATABASE} = "$database_file";
 };
 
 use Catalyst::Test 'My::App';

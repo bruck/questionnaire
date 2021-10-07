@@ -11,6 +11,7 @@ requires 'DBIx::Class';
 requires 'HTTP::Request::Common';
 requires 'Module::Runtime';
 requires 'Moose';
+requires 'SQL::Translator';
 
 on 'test' => sub {
     requires 'Path::Tiny';
