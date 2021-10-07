@@ -5,7 +5,11 @@ use inc::Module::Install 1.02;
 use Module::Install::Catalyst;
 
 name 'TPS-Questionnaire';
-all_from 'lib/TPS/Questionnaire.pm';
+abstract_from 'lib/TPS/Questionnaire.pm';
+version_from 'lib/TPS/Questionnaire.pm';
+
+author 'Toby Inkster <tinkster@theperlshop.com>';
+author 'Tim King <timk@theperlshop.com>';
 
 requires 'Catalyst::Runtime' => '5.90128';
 requires 'Catalyst::Plugin::ConfigLoader';
