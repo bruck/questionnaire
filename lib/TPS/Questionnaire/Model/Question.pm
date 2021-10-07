@@ -105,6 +105,7 @@ sub to_hashref {
     my $h = {
         id => $self->id,
         question_text => $self->question_text,
+        question_type => $self->question_type,
     };
 
     return $h;
