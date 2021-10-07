@@ -29,82 +29,6 @@ Handles posts to /api/questionnaire and /api/questionnaire/{id}
 Without an ID, creates a new questionnaire.
 With an ID, posts a response to the questionnaire.
 
-POST format to create a new questionnaire:
-
-    {
-        "title": "Questionnaire Title",
-        "is_published": true,
-        "questions": [
-            {
-                "question_text": "What is your name?"
-                "question_type": "text"
-            },
-            {
-                "question_text": "What is your favourite colour?",
-                "question_type": "single_option",
-                "options": [
-                    { "option_text": "Red" },
-                    { "option_text": "Blue" },
-                    { "option_text": "Yellow" },
-                    { "option_text": "Green" }
-                ]
-            },
-            {
-                "question_text": "Do you have a pet?"
-                "question_type": "multi_option",
-                "options": [
-                    { "option_text": "Dog" },
-                    { "option_text": "Cat" },
-                    { "option_text": "Rabbit" },
-                    { "option_text": "Other" }
-                ]
-            }
-        ]
-    }
-
-Questions default to being "text" questions. Objects which only have
-question_text or option_text can be collapsed to a string. So the above
-can be written as:
-
-    {
-        "title": "Questionnaire Title",
-        "is_published": true,
-        "questions": [
-            "What is your name?",
-            {
-                "question_text": "What is your favourite colour?",
-                "question_type": "single_option",
-                "options": [ "Red", "Blue", "Yellow", "Green" ]
-            },
-            {
-                "question_text": "Do you have a pet?"
-                "question_type": "multi_option",
-                "options": [ "Dog", "Cat", "Rabbit", "Other" ]
-            }
-        ]
-    }
-
-Response format:
-
-    {
-        "status": "ok",
-        "result": { ... questionnaire object ... }
-    }
-
-Request format for posting a response:
-
-    {
-        "user_id": 123,
-        "answers": {
-            "1": "Toby Inkster",
-            "2": 4,
-            "3": [5, 6]
-        }
-    }
-
-The keys to the answers object are question ID numbers.
-The values are option IDs, arrays of option IDs, or text answers.
-
 =cut
 
 sub post_questionnaire :Path('questionnaire') POST CaptureArgs(1) Consumes(JSON) {
@@ -133,25 +57,6 @@ sub post_questionnaire :Path('questionnaire') POST CaptureArgs(1) Consumes(JSON)
 Handles get requests to /api/questionnaire and /api/questionnaire/{id}
 
 Lists existing questionnaires and shows existing questionnaires.
-
-TODO: handle pagination
-
-Response format for list (i.e. no ID):
-
-    {
-        "status": "ok",
-        "result": {
-            "count": 1,
-            "list": [ ... ]
-        }
-    }
-
-Response format for questionnaire (i.e. numeric ID):
-
-    {
-        "status": "ok",
-        "result": { ... questionnaire object ... }
-    }
 
 =cut
 
