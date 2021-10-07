@@ -1,6 +1,6 @@
 package TPS::Questionnaire::Controller::Root;
 use Moose;
-use Pod::Simple::HTML;
+use Text::Markdown 'markdown';
 use Path::Tiny 'path';
 use namespace::autoclean;
 
@@ -33,10 +33,9 @@ The root page (/)
 sub index :Path :Args(0) {
     my ($self, $c) = @_;
 
-    my $docs = path(__FILE__)->parent->child('API.pm');
-    my $p = 'Pod::Simple::HTML'->new;
-    $p->output_string(\my $html);
-    $p->parse_file("$docs");
+    my $rootdir = path(__FILE__);
+    $rootdir = $rootdir->parent for split /::/, __PACKAGE__;
+    my $html = markdown($rootdir->parent->child('README.md')->slurp);
     $c->response->body($html);
 }
 

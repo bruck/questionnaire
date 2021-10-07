@@ -25,8 +25,8 @@ requires 'DBIx::Class';
 requires 'HTTP::Request::Common';
 requires 'Module::Runtime';
 requires 'Path::Tiny';
-requires 'Pod::Simple::HTML';
 requires 'SQL::Translator';
+requires 'Text::Markdown';
 
 test_requires 'Test::Class';
 test_requires 'Test2::V0';
