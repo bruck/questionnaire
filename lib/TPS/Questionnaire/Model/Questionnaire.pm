@@ -68,8 +68,6 @@ has is_published => (
 
 Arrayref of questions, which should be objects doing the
 L<TPS::Questionnaire::Model::Question> role. Defaults to the empty array.
-A method C<add_question> is available to add a question to the end of the
-list.
 
 =cut
 
@@ -77,10 +75,6 @@ has questions => (
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { return []; },
-    traits => [ 'Array' ],
-    handles => {
-        add_question => 'push',
-    },
 );
 
 
@@ -111,20 +105,16 @@ hashref of data, formatted in the same manner the API accepts.
 sub from_hashref {
     my ($class, $data) = (shift, @_);
 
-    my $self = $class->new(
+    return $class->new(
         title => $data->{'title'},
         is_published => $data->{'is_published'},
+
+        questions => [ map {
+            my $q_data = ref $_ ? $_ : { question_text => $_ };
+            my $q_class = _question_module($q_data->{question_type});
+            $q_class->from_hashref($q_data);
+        } $data->{questions}->@* ],
     );
-
-    for my $q_data (@{$data->{'questions'} // []}) {
-        if (!ref $q_data) {
-            $q_data = { question_text => $q_data };
-        }
-        my $q_class = _question_module($q_data->{'question_type'});
-        $self->add_question($q_class->from_hashref($q_data));
-    }
-
-    return $self;
 }
 
 =head2 to_hashref
@@ -137,13 +127,11 @@ for JSON serialization.
 sub to_hashref {
     my ($self) = (shift);
 
-    my $h = {
+    return {
         title => $self->title,
         is_published => $self->is_published ? \1 : \0,
         questions => [ map $_->to_hashref, @{$self->questions} ],
     };
-
-    return $h;
 }
 
 =head2 from_id($schema, $id)
@@ -177,24 +165,22 @@ L<TPS::Questionnaire::Schema::Result::Questionnaire> object.
 sub from_db_object {
     my ($class, $schema, $result) = (shift, @_);
 
-    my $self = $class->new(
-        id => $result->questionnaire_id,
-        title => $result->title,
-        is_published => $result->is_published,
-    );
-
     my $rs = $result->questionnaire_question->search(
         undef,
         { order_by => 'rank', prefetch => 'question' },
     );
 
-    while (my $qq = $rs->next) {
-        my $q = $qq->question;
-        my $q_class = _question_module($q->question_type);
-        $self->add_question($q_class->from_db_object($schema, $q));
-    }
+    return $class->new(
+        id => $result->questionnaire_id,
+        title => $result->title,
+        is_published => $result->is_published,
 
-    return $self;
+        questions => [ map {
+            my $q = $_->question;
+            my $q_class = _question_module($q->question_type);
+            $q_class->from_db_object($schema, $q);
+        } $rs->all ],
+    );
 }
 
 =head2 save($schema)
