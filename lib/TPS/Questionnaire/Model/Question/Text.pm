@@ -32,6 +32,30 @@ sub question_type {
     return 'text';
 }
 
+=head2 validate($answer)
+
+Any string is valid.
+
+Returns a list of errors.
+
+=cut
+
+sub validate {
+    my ($self, $answer) = (shift, @_);
+    my @errors;
+
+    if (defined $answer) {
+        if (ref $answer) {
+            push @errors, $self->_error($answer, "Answer must be text; not an array, object, or boolean");
+        }
+    }
+    else {
+        push @errors, $self->_error($answer, "Answer must be text; not null");
+    }
+
+    return @errors;
+}
+
 =head1 AUTHOR
 
 Toby Inkster, tinkster@theperlshop.net

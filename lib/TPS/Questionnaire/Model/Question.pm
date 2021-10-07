@@ -28,9 +28,15 @@ that consume it.
 
 The question type code for storing the question in the database.
 
+=head2 validate($answer)
+
+A method to validate an answer, returning a list of
+L<TPS::Questionnaire::Model::ValidationError> objects. If the answer is okay,
+then this should be the empty list.
+
 =cut
 
-requires qw(question_type);
+requires qw(question_type validate);
 
 =head1 ATTRIBUTES
 
@@ -152,6 +158,22 @@ sub _save {
     });
 
     return $self->id;
+}
+
+=head2 _error($answer, $error_text)
+
+Helper method to construct a L<TPS::Questionnaire::Model::ValidationError>.
+
+=cut
+
+sub _error {
+    my ($self, $answer, $error_text) = (shift, @_);
+    require TPS::Questionnaire::Model::ValidationError;
+    return 'TPS::Questionnaire::Model::ValidationError'->new(
+        question => $self,
+        answer => $answer,
+        error_text => $error_text,
+    );
 }
 
 =head1 AUTHOR

@@ -34,6 +34,46 @@ sub question_type {
     return 'single_option';
 }
 
+=head2 validate($answer)
+
+Checks that the answer is the ID of a valid option.
+
+Returns a list of errors.
+
+=cut
+
+sub validate {
+    my ($self, $answer) = (shift, @_);
+    my @errors;
+
+    if (defined $answer) {
+        if (ref $answer) {
+            push @errors, $self->_error($answer, "Answer must be one of the given options; not an array, object, or boolean");
+        }
+        else {
+            if ($answer =~ /\A[0-9]+\z/) {
+                my $found;
+                for my $option (@{$self->options}) {
+                    if ($answer == $option->id) {
+                        ++$found;
+                        last;
+                    }
+                }
+                push @errors, $self->_error($answer, "Answer must be one of the given options; not custom text")
+                    if !$found;
+            }
+            else {
+                push @errors, $self->_error($answer, "Answer must be numeric");
+            }
+        }
+    }
+    else {
+        push @errors, $self->_error($answer, "Answer must be one of the given options; not null");
+    }
+
+    return @errors;
+}
+
 =head1 AUTHOR
 
 Toby Inkster, tinkster@theperlshop.net

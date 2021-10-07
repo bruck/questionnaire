@@ -34,6 +34,55 @@ sub question_type {
     return 'multi_option';
 }
 
+=head2 validate($answer)
+
+Checks that the answer is an arrayref of valid options.
+
+Returns a list of errors.
+
+=cut
+
+sub validate {
+    my ($self, $answer) = (shift, @_);
+    my @errors;
+
+    if ('ARRAY' eq ref($answer)//'') {
+        my $i = 0;
+        for my $selected (@$answer) {
+            ++$i;
+            if (defined $selected) {
+                if (ref $selected) {
+                    push @errors, $self->_error($answer, "Answer $i must be one of the given options; not an array, object, or boolean");
+                }
+                else {
+                    if ($selected =~ /\A[0-9]+\z/) {
+                        my $found;
+                        for my $option (@{$self->options}) {
+                            if ($selected == $option->id) {
+                                ++$found;
+                                last;
+                            }
+                        }
+                        push @errors, $self->_error($answer, "Answer $i must be one of the given options; not custom text")
+                            if !$found;
+                    }
+                    else {
+                        push @errors, $self->_error($answer, "Answer $i must be numeric");
+                    }
+                }
+            }
+            else {
+                push @errors, $self->_error($answer, "Answer $i must be one of the given options; not null");
+            }
+        }
+    }
+    else {
+        push @errors, $self->_error($answer, "Must be an array of answers");
+    }
+
+    return @errors;
+}
+
 =head1 AUTHOR
 
 Toby Inkster, tinkster@theperlshop.net

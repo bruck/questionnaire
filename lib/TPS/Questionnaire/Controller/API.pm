@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 
 use TPS::Questionnaire::Model::Questionnaire;
+use TPS::Questionnaire::Model::QuestionnaireAnswer;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -21,13 +22,14 @@ Handles requests for /api/*
 
 =head1 METHODS
 
-=head2 create_questionnaire
+=head2 post_questionnaire
 
-Handles posts to /api/questionnaire
+Handles posts to /api/questionnaire and /api/questionnaire/{id}
 
-Creates a new questionnaire.
+Without an ID, creates a new questionnaire.
+With an ID, posts a response to the questionnaire.
 
-POST format:
+POST format to create a new questionnaire:
 
     {
         "title": "Questionnaire Title",
@@ -89,16 +91,41 @@ Response format:
         "result": { ... questionnaire object ... }
     }
 
+Request format for posting a response:
+
+    {
+        "user_id": 123,
+        "answers": {
+            "1": "Toby Inkster",
+            "2": 4,
+            "3": [5, 6]
+        }
+    }
+
+The keys to the answers object are question ID numbers.
+The values are option IDs, arrays of option IDs, or text answers.
+
 =cut
 
-sub create_questionnaire :Path('questionnaire') POST Args(0) Consumes(JSON) {
-    my ($self, $c) = (shift, @_);
+sub post_questionnaire :Path('questionnaire') POST CaptureArgs(1) Consumes(JSON) {
+    my ($self, $c, $id) = (shift, @_);
 
-    my $q = TPS::Questionnaire::Model::Questionnaire->from_hashref($c->request->body_data);
-    $q->save($c->schema);
-    $c->stash->{'status'} = 'ok';
-    $c->stash->{'result'} = $q->to_hashref;
-    $c->forward('View::JSON');
+    if ($id) {
+        my %posted = %{$c->request->body_data};
+        $posted{questionnaire_id} = $id;
+        my $qa = 'TPS::Questionnaire::Model::QuestionnaireAnswer'->from_hashref(\%posted);
+        $qa->save($c->schema);
+        $c->stash->{'status'} = 'ok';
+        $c->stash->{'result'} = $qa->to_hashref;
+        $c->forward('View::JSON');
+    }
+    else {
+        my $q = 'TPS::Questionnaire::Model::Questionnaire'->from_hashref($c->request->body_data);
+        $q->save($c->schema);
+        $c->stash->{'status'} = 'ok';
+        $c->stash->{'result'} = $q->to_hashref;
+        $c->forward('View::JSON');
+    }
 }
 
 =head2 get_questionnaire
