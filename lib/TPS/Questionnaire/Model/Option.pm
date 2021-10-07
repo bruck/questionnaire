@@ -11,13 +11,11 @@ use constant { true => !!1, false => !!0 };
 
 =head1 NAME
 
-TPS::Questionnaire::Model::Question - represents a question
+TPS::Questionnaire::Model::Option - represents an option for a question
 
 =head1 DESCRIPTION
 
-This role represents a question which may belong to a questionnaire.
-
-It is consumed by question type classes.
+This class represents an option or choice which may belong to a question.
 
 =head1 ATTRIBUTES
 

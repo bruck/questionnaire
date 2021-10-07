@@ -9,6 +9,24 @@ use constant { true => !!1, false => !!0 };
 
 use Module::Runtime 'use_module';
 
+=head1 NAME
+
+TPS::Questionnaire::Model::Question::HasOptions - code shared between question types that have options
+
+=head1 DESCRIPTION
+
+A Moose role for code shared between question types that have options.
+
+=head1 ATTRIBUTES
+
+=head2 options
+
+An array of L<TPS::Questionnaire::Model::Option> objects.
+Defaults to the empty array.
+Also provides a C<add_option> method to add an option to the end of the array.
+
+=cut
+
 has options => (
     is => 'rw',
     isa => 'ArrayRef[TPS::Questionnaire::Model::Option]',
@@ -18,6 +36,13 @@ has options => (
         add_option => 'push',
     },
 );
+
+=head1 METHOD MODIFIERS
+
+This role modifies the C<from_hashref>, C<to_hashref>, C<from_db_object>, and
+C<_save> methods to load and save options.
+
+=cut
 
 around from_hashref => sub {
     my ($next, $class, $data) = (shift, shift, @_);
@@ -72,5 +97,16 @@ around _save => sub {
 
     return $return;
 };
+
+=head1 AUTHOR
+
+Toby Inkster, tinkster@theperlshop.net
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 1;
