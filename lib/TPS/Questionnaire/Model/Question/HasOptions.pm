@@ -8,6 +8,7 @@ use namespace::autoclean;
 use constant { true => !!1, false => !!0 };
 
 use Module::Runtime 'use_module';
+use TPS::Questionnaire::Model::Option;
 
 =head1 NAME
 
@@ -54,7 +55,7 @@ around from_hashref => sub {
             $opt_data = { option_text => $opt_data };
         }
         my $opt_class = 'TPS::Questionnaire::Model::Option';
-        $self->add_option(use_module($opt_class)->from_hashref($opt_data));
+        $self->add_option($opt_class->from_hashref($opt_data));
     }
 
     return $self;
