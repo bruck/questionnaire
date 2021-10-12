@@ -59,16 +59,6 @@ Attempt to render a view, if needed.
 
 sub end :ActionClass('RenderView') {}
 
-=head1 AUTHOR
-
-Toby Inkster, tinkster@theperlshop.net
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
 

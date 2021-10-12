@@ -89,17 +89,6 @@ TPS::Questionnaire - questionnaire application using Catalyst, DBIx::Class, and 
 
 L<TPS::Questionnaire::Controller::Root>, L<Catalyst>
 
-=head1 AUTHOR
-
-Toby Inkster, tinkster@theperlshop.com
-
-Tim King, timk@theperlshop.com
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
 =cut
 
 1;

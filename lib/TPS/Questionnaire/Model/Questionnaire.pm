@@ -242,16 +242,6 @@ sub summary_list {
     \@return;
 }
 
-=head1 AUTHOR
-
-Toby Inkster, tinkster@theperlshop.net
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
 
