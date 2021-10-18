@@ -1,7 +1,6 @@
 package TPS::Questionnaire::Controller::API;
 use Moose;
 use namespace::autoclean;
-use Data::Dumper;
 
 use TPS::Questionnaire::Model::Questionnaire;
 use TPS::Questionnaire::Model::QuestionnaireAnswer;
