@@ -1,6 +1,7 @@
 package TPS::Questionnaire::Controller::API;
 use Moose;
 use namespace::autoclean;
+use Data::Dumper;
 
 use TPS::Questionnaire::Model::Questionnaire;
 use TPS::Questionnaire::Model::QuestionnaireAnswer;
@@ -84,6 +85,55 @@ sub get_questionnaire :Path('questionnaire') GET CaptureArgs(1) {
     $c->forward('View::JSON');
 }
 
+=head2 update_questionnaire
+ Handles requests to /api/questionnaire/{id}
+ updates the is_published flag, to publish the questionnaire, if the questionnaire is not yet is_published
+ and the submitted value of the flag is 'true'
+=cut
+
+
+sub update_questionnaire :Path('questionnaire') PUT CaptureArgs(1) Consumes(JSON) {
+  my ($self, $c, $id) = (shift , @_);
+
+  if ($id) {
+    my %posted = %{$c->request->body_data};
+    unless ($posted{'is_published'}) {
+      $c->stash->{'status'} = 'error';
+      $c->stash->{'error'} = 'Bad Request - Unpublishing not allowed';
+      $c->response->status(400);
+      return;
+    }
+    my $q = TPS::Questionnaire::Model::Questionnaire->from_id($c->schema, $id);
+
+    if ($q) {
+      my $details = $q->to_hashref;
+      if ($details->{is_published}) {
+        $c->stash->{'status'} = 'error';
+        $c->stash->{'error'} = 'Conflict - questionnaire already published';
+        $c->response->status(409);
+        return;
+      }
+    $details->{'is_published'} = 1;
+    my $qa = 'TPS::Questionnaire::Model::Questionnaire'->from_hashref($details);
+    $qa->save($c->schema);
+    $c->stash->{'status'} = 'ok';
+    $c->stash->{'result'} = $qa->to_hashref;
+    $c->forward('View::JSON');
+
+    }
+    else {
+        $c->stash->{'status'} = 'error';
+        $c->stash->{'error'} = 'Not found';
+        $c->response->status(404);
+    }
+  }
+  else {
+    $c->stash->{'status'} = 'error';
+    $c->stash->{'error'} = 'Not found - No ID specified';
+    $c->response->status(404);
+  }
+
+}
 
 __PACKAGE__->meta->make_immutable;
 
