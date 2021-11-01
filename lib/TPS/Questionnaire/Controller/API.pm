@@ -103,22 +103,20 @@ sub update_questionnaire :Path('questionnaire') PUT CaptureArgs(1) Consumes(JSON
       return;
     }
     my $q = TPS::Questionnaire::Model::Questionnaire->from_id($c->schema, $id);
-
     if ($q) {
-      my $details = $q->to_hashref;
-      if ($details->{is_published}) {
+      if ($q->is_published) {
         $c->stash->{'status'} = 'error';
         $c->stash->{'error'} = 'Conflict - questionnaire already published';
         $c->response->status(409);
         return;
       }
-    $details->{'is_published'} = 1;
-    my $qa = 'TPS::Questionnaire::Model::Questionnaire'->from_hashref($details);
-    $qa->save($c->schema);
-    $c->stash->{'status'} = 'ok';
-    $c->stash->{'result'} = $qa->to_hashref;
-    $c->forward('View::JSON');
+      $q->is_published(1);
 
+      #$qa->save($c->schema);
+      $q->save($c->schema);
+      $c->stash->{'status'} = 'ok';
+      $c->stash->{'result'} = $q->to_hashref;
+      $c->forward('View::JSON');
     }
     else {
         $c->stash->{'status'} = 'error';

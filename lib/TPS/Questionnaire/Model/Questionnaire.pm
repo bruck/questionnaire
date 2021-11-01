@@ -197,8 +197,13 @@ sub save {
     # Even though this object has 'rw' attributes, questionnaires are
     # conceptually write-once.
     if ($self->has_id) {
-        carp 'Save questionnaire which already exists';
-        return $self->id;
+        my $result = $schema
+           ->resultset('Questionnaire')
+           ->update_or_create({
+             questionnaire_id => $self->id,
+             is_published=>$self->is_published
+           });
+       return $result;
     }
 
     my $result = $schema
