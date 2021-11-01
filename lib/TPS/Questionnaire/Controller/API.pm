@@ -85,9 +85,9 @@ sub get_questionnaire :Path('questionnaire') GET CaptureArgs(1) {
 }
 
 =head2 update_questionnaire
- Handles requests to /api/questionnaire/{id}
- updates the is_published flag, to publish the questionnaire, if the questionnaire is not yet is_published
- and the submitted value of the flag is 'true'
+    Handles PUT requests to /api/questionnaire/{id}
+    updates the is_published flag, to publish the questionnaire, if the questionnaire is not yet is_published
+    and the submitted value of the flag is 'true'
 =cut
 
 
@@ -111,11 +111,9 @@ sub update_questionnaire :Path('questionnaire') PUT CaptureArgs(1) Consumes(JSON
         return;
       }
       $q->is_published(1);
-
-      #$qa->save($c->schema);
-      $q->save($c->schema);
+      my $result = $q->save($c->schema);
       $c->stash->{'status'} = 'ok';
-      $c->stash->{'result'} = $q->to_hashref;
+      $c->stash->{'result'} = $result->to_hashref;
       $c->forward('View::JSON');
     }
     else {

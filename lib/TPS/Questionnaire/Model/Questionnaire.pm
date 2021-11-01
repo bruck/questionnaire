@@ -203,7 +203,8 @@ sub save {
              questionnaire_id => $self->id,
              is_published=>$self->is_published
            });
-       return $result;
+       return $self->from_db_object($schema, $result);
+       #return $result;
     }
 
     my $result = $schema
